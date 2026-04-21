@@ -106,3 +106,37 @@ def change_news_on_page_keyboard():
         [InlineKeyboardButton(text="20", callback_data="news_on_page:20")],
         [InlineKeyboardButton(text="Назад", callback_data="back-to-settings")]
     ])
+
+
+def subscription_menu_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Подписаться на новые источники", callback_data="new_subscription")],
+        [InlineKeyboardButton(text="Отписаться от источника", callback_data="new_unsubscription")],
+        [InlineKeyboardButton(text="Назад", callback_data="exit_from_subscriptions")]
+    ])
+
+
+def subscription_keyboard(available: list[str]):
+    inline_keyboard_buttons = []
+    for source in available:
+        inline_keyboard_buttons.append(
+            [InlineKeyboardButton(text=f"{source}", callback_data=f"subscribe:{source}")]
+        )
+    inline_keyboard_buttons.append(
+        [InlineKeyboardButton(text="Назад", callback_data="back_to_subscription_main_menu")]
+    )
+
+    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard_buttons)
+
+
+def unsubscription_keyboard(available: list[str]):
+    inline_keyboard_buttons = []
+    for source in available:
+        inline_keyboard_buttons.append(
+            [InlineKeyboardButton(text=f"{source}", callback_data=f"unsubscribe:{source}")]
+        )
+    inline_keyboard_buttons.append(
+        [InlineKeyboardButton(text="Назад", callback_data="back_to_subscription_main_menu")]
+    )
+
+    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard_buttons)

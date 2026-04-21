@@ -28,3 +28,7 @@ class UnitOfWork:
     @property
     def users(self) -> UserRepository:
         return UserRepository(db=self._session)
+
+    @property
+    def subscriptions(self) -> SubscriptionRepository:
+        return SubscriptionRepository(db=self._session)

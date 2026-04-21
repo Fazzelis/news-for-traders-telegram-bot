@@ -6,6 +6,7 @@ from sqlalchemy import (
     func,
     Integer
 )
+from sqlalchemy.orm import relationship
 
 
 class User(Base):
@@ -17,3 +18,5 @@ class User(Base):
     last_name = Column(String)
     default_news_source = Column(String, nullable=False, server_default="kommersant")
     news_on_page = Column(Integer, server_default="20")
+
+    subscriptions = relationship("Subscription", back_populates="user")
