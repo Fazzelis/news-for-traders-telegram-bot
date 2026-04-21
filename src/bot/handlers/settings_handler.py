@@ -23,6 +23,7 @@ class SettingsHandler:
         self.router.callback_query.register(self.change_source_to_kommersant, F.data == "change-source-to-kommersant")
         self.router.callback_query.register(self.change_source_to_bloomberg, F.data == "change-source-to-bloomberg")
         self.router.callback_query.register(self.change_news_on_page, F.data == "change-news-on-page")
+        self.router.callback_query.register(self.save_news_on_page, F.data.startswith("news_on_page:"))
 
     async def open_settings(self, message: Message, user: User):
         await message.answer(
@@ -35,6 +36,22 @@ class SettingsHandler:
             parse_mode="HTML",
             reply_markup=settings_menu()
         )
+
+    async def save_news_on_page(self, callback: CallbackQuery, user: User, data: dict):
+        news_count = int(callback.data.split(":")[1])
+        user_service = data["user_service"]
+        await user_service.patch_user_info(user=user, news_on_page=news_count)
+        await callback.message.edit_text(
+            text="".join(
+                "<b>Выбраны следующие настройки:</b>\n"
+                f"Источник по умолчанию: {user.default_news_source}\n\n"
+                f"Количество новостей на странице: {user.news_on_page}\n\n"
+                "Выберите необходимый параметр:"
+            ),
+            parse_mode="HTML",
+            reply_markup=settings_menu()
+        )
+        await callback.answer(text="Количество новостей на странице обновлено!")
 
     async def exit_from_settings(self, callback: CallbackQuery):
         await callback.message.edit_text(

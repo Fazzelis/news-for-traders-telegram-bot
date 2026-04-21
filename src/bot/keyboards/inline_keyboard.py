@@ -1,30 +1,47 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
-def news_menu() -> InlineKeyboardMarkup:
+def news_menu():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="📅 За 1 день", callback_data="page:1:0")],
-        [InlineKeyboardButton(text="📆 За неделю", callback_data="page:7:0")],
-        [InlineKeyboardButton(text="📆 За 2 недели", callback_data="page:14:0")],
-        [InlineKeyboardButton(text="📆 За 4 недели", callback_data="page:28:0")],
+        [InlineKeyboardButton(text="Получить новости из источника по умолчанию", callback_data="choose_day:default")],
+        [InlineKeyboardButton(text="Получить новости из определенного источника", callback_data="choose_source")],
         [InlineKeyboardButton(text="Назад", callback_data="exit-from-news")]
     ])
 
 
-def pagination_news_menu(current_page: int, total_pages: int, days: int) -> InlineKeyboardMarkup:
+def choose_news_source():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Все источники", callback_data="choose_day:all")],
+        [InlineKeyboardButton(text="kommersant", callback_data="choose_day:kommersant")],
+        [InlineKeyboardButton(text="bloomberg", callback_data="choose_day:bloomberg")],
+        [InlineKeyboardButton(text="Назад", callback_data=f"exit-to-news-menu")]
+    ])
+
+
+def choose_day_keyboard(source: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="📅 За 1 день", callback_data=f"page:1:0:{source}")],
+        [InlineKeyboardButton(text="📆 За неделю", callback_data=f"page:7:0:{source}")],
+        [InlineKeyboardButton(text="📆 За 2 недели", callback_data=f"page:14:0:{source}")],
+        [InlineKeyboardButton(text="📆 За 4 недели", callback_data=f"page:28:0:{source}")],
+        [InlineKeyboardButton(text="Назад", callback_data=f"exit-to-news-menu")]
+    ])
+
+
+def pagination_news_menu(current_page: int, total_pages: int, days: int, source: str) -> InlineKeyboardMarkup:
     keyboard = []
     nav_buttons = []
 
     nav_buttons.append(
         InlineKeyboardButton(
             text="⏮️",
-            callback_data=f"page:{days}:0"
+            callback_data=f"page:{days}:0:{source}"
         )
     )
     nav_buttons.append(
         InlineKeyboardButton(
             text="◀️",
-            callback_data=f"page:{days}:{max(0, current_page - 1)}"
+            callback_data=f"page:{days}:{max(0, current_page - 1)}:{source}"
         )
     )
 
@@ -38,14 +55,14 @@ def pagination_news_menu(current_page: int, total_pages: int, days: int) -> Inli
     nav_buttons.append(
         InlineKeyboardButton(
             text="▶️",
-            callback_data=f"page:{days}:{min(total_pages - 1, current_page + 1)}"
+            callback_data=f"page:{days}:{min(total_pages - 1, current_page + 1)}:{source}"
         )
     )
 
     nav_buttons.append(
         InlineKeyboardButton(
             text="⏭️",
-            callback_data=f"page:{days}:{total_pages - 1}"
+            callback_data=f"page:{days}:{total_pages - 1}:{source}"
         )
     )
 
@@ -54,7 +71,7 @@ def pagination_news_menu(current_page: int, total_pages: int, days: int) -> Inli
     keyboard.append([
         InlineKeyboardButton(
             text="🔄 Выбрать другой период",
-            callback_data="back_to_periods"
+            callback_data=f"back_to_periods:{source}"
         )
     ])
 

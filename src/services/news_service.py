@@ -31,16 +31,17 @@ class NewsService:
                 )
         self.logger.info(f"Посты успешно добавлены")
 
-    async def get_n_news_for_n_days(self, days: int, page: int, limit: int) -> Dict[str, Any]:
+    async def get_n_news_for_n_days(self, days: int, page: int, limit: int, source: str) -> Dict[str, Any]:
         uow = UnitOfWork()
         offset = page * limit
         async with uow.start():
             news_list = await uow.news.get_n_news_for_n_days(
                 days=days,
                 limit=limit,
-                offset=offset
+                offset=offset,
+                source=source
             )
-            total_news = await uow.news.get_count_news_for_n_days(days=days)
+            total_news = await uow.news.get_count_news_for_n_days(days=days, source=source)
         total_pages = max(1, math.ceil(total_news / limit))
         moscow_timezone = timezone(timedelta(hours=3))
         return {

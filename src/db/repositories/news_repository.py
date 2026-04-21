@@ -32,23 +32,40 @@ class NewsRepository:
         news = result.scalars().all()
         return list(news)
 
-    async def get_n_news_for_n_days(self, days: int, offset: int, limit: int) -> List[News]:
+    async def get_n_news_for_n_days(self, days: int, offset: int, limit: int, source: str) -> List[News]:
         start_date = datetime.now(UTC) - timedelta(days=days)
-        result = await self.db.execute(
-            select(News)
-            .where(News.published_at >= start_date)
-            .order_by(News.published_at.asc())
-            .limit(limit)
-            .offset(offset)
-        )
+        if source == "all":
+            result = await self.db.execute(
+                select(News)
+                .where(News.published_at >= start_date)
+                .order_by(News.published_at.asc())
+                .limit(limit)
+                .offset(offset)
+            )
+        else:
+            result = await self.db.execute(
+                select(News)
+                .where(News.published_at >= start_date)
+                .where(News.source == source)
+                .order_by(News.published_at.asc())
+                .limit(limit)
+                .offset(offset)
+            )
 
         news = result.scalars().all()
         return list(news)
 
-    async def get_count_news_for_n_days(self, days: int) -> int:
+    async def get_count_news_for_n_days(self, days: int, source: str) -> int:
         start_date = datetime.now(UTC) - timedelta(days=days)
-        result = await self.db.execute(
-            select(func.count(News.id))
-            .where(News.published_at >= start_date)
-        )
+        if source == "all":
+            result = await self.db.execute(
+                select(func.count(News.id))
+                .where(News.published_at >= start_date)
+            )
+        else:
+            result = await self.db.execute(
+                select(func.count(News.id))
+                .where(News.published_at >= start_date)
+                .where(News.source == source)
+            )
         return result.scalar()
