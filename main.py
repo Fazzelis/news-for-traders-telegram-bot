@@ -25,7 +25,7 @@ async def check_and_save_new_news(news_service: NewsService):
 
 
 async def main():
-    parsers = [KommersantParser(), BloombergParser()]
+    parsers = [KommersantParser(), BloombergParser(), InterfaxParser(), TheGuardianParser()]
     news_service = NewsService(parsers=parsers)
     asyncio.create_task(check_and_save_new_news(news_service=news_service))
 
