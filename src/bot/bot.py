@@ -1,11 +1,11 @@
 from logging import getLogger
 from src.config import settings
 from aiogram import Bot, Dispatcher
-from src.bot.handlers import *
 from aiogram.client.session.aiohttp import AiohttpSession
 from src.services.news_service import NewsService
 from src.middlewares.user_middleware import UserMiddleware
 from src.services.user_service import UserService
+from src.bot.handlers import *
 
 
 class NewsTelegramBot:
@@ -20,8 +20,13 @@ class NewsTelegramBot:
 
         self.dispatcher.update.middleware(UserMiddleware(self.user_service))
 
-        self.dispatcher.include_router(start_router)
-        self.dispatcher.include_router(news_router)
+        self.settings_handler = SettingsHandler()
+        self.news_handler = NewsHandler()
+        self.help_handler = HelpHandler()
+
+        self.dispatcher.include_router(self.settings_handler.router)
+        self.dispatcher.include_router(self.news_handler.router)
+        self.dispatcher.include_router(self.help_handler.router)
 
         self.news_service = NewsService()
 

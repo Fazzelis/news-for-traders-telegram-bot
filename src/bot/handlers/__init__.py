@@ -1,2 +1,3 @@
-from .start import router as start_router
-from .news import router as news_router
+from .help_handler import HelpHandler
+from .settings_handler import SettingsHandler
+from .news_handler import NewsHandler
