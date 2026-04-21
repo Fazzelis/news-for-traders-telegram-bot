@@ -6,8 +6,10 @@ load_dotenv()
 
 
 class Setting(BaseSettings):
-    bot_key: str = Field(..., env="BOT_TOKEN")
+    bot_token: str = Field(..., env="BOT_TOKEN")
     database_url: str = Field(default="postgresql+asyncpg://login:password@localhost:5432/news-tg-bot", env="DATABASE_URL")
+    save_new_news_delay: int = 5 # в минутах
+    proxy_url: str = Field(..., env="PROXY_URL")
 
     class Config:
         env_file = ".env"
