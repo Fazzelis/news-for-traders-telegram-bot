@@ -22,6 +22,8 @@ class SettingsHandler:
         self.router.callback_query.register(self.change_default_source, F.data == "change-default-source")
         self.router.callback_query.register(self.change_source_to_kommersant, F.data == "change-source-to-kommersant")
         self.router.callback_query.register(self.change_source_to_bloomberg, F.data == "change-source-to-bloomberg")
+        self.router.callback_query.register(self.change_source_to_interfax, F.data == "change-source-to-interfax")
+        self.router.callback_query.register(self.change_source_to_theguardian, F.data == "change-source-to-theguardian")
         self.router.callback_query.register(self.change_news_on_page, F.data == "change-news-on-page")
         self.router.callback_query.register(self.save_news_on_page, F.data.startswith("news_on_page:"))
 
@@ -94,6 +96,36 @@ class SettingsHandler:
     async def change_source_to_bloomberg(self, callback: CallbackQuery, user: User, data: dict):
         user_service = data["user_service"]
         await user_service.patch_user_info(user=user, source="bloomberg")
+        await callback.message.edit_text(
+            text="".join(
+                "<b>Выбраны следующие настройки:</b>\n"
+                f"Источник по умолчанию: {user.default_news_source}\n\n"
+                f"Количество новостей на странице: {user.news_on_page}\n\n"
+                "Выберите необходимый параметр:"
+            ),
+            parse_mode="HTML",
+            reply_markup=settings_menu()
+        )
+        await callback.answer("Источник успешно обновлен!")
+
+    async def change_source_to_interfax(self, callback: CallbackQuery, user: User, data: dict):
+        user_service = data["user_service"]
+        await user_service.patch_user_info(user=user, source="interfax")
+        await callback.message.edit_text(
+            text="".join(
+                "<b>Выбраны следующие настройки:</b>\n"
+                f"Источник по умолчанию: {user.default_news_source}\n\n"
+                f"Количество новостей на странице: {user.news_on_page}\n\n"
+                "Выберите необходимый параметр:"
+            ),
+            parse_mode="HTML",
+            reply_markup=settings_menu()
+        )
+        await callback.answer("Источник успешно обновлен!")
+
+    async def change_source_to_theguardian(self, callback: CallbackQuery, user: User, data: dict):
+        user_service = data["user_service"]
+        await user_service.patch_user_info(user=user, source="theguardian")
         await callback.message.edit_text(
             text="".join(
                 "<b>Выбраны следующие настройки:</b>\n"

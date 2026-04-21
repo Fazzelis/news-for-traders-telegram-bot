@@ -14,6 +14,8 @@ def choose_news_source():
         [InlineKeyboardButton(text="Все источники", callback_data="choose_day:all")],
         [InlineKeyboardButton(text="kommersant", callback_data="choose_day:kommersant")],
         [InlineKeyboardButton(text="bloomberg", callback_data="choose_day:bloomberg")],
+        [InlineKeyboardButton(text="interfax", callback_data="choose_day:interfax")],
+        [InlineKeyboardButton(text="theguardian", callback_data="choose_day:theguardian")],
         [InlineKeyboardButton(text="Назад", callback_data=f"exit-to-news-menu")]
     ])
 
@@ -90,6 +92,8 @@ def default_source_menu():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="kommersant", callback_data="change-source-to-kommersant")],
         [InlineKeyboardButton(text="bloomberg", callback_data="change-source-to-bloomberg")],
+        [InlineKeyboardButton(text="interfax", callback_data="change-source-to-interfax")],
+        [InlineKeyboardButton(text="theguardian", callback_data="change-source-to-theguardian")],
         [InlineKeyboardButton(text="Назад", callback_data="back-to-settings")]
     ])
 
