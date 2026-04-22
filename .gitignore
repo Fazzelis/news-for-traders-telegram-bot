@@ -1,0 +1,11 @@
+.venv/
+.idea/
+.env
+alembic.ini
+migration/README
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.orig
+storage/
