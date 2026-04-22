@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta, UTC
 from src.db.models.news_model import News
 from sqlalchemy import select, func
-from sqlalchemy.dialects.postgresql import insert
 
 
 class NewsRepository:
@@ -17,15 +16,25 @@ class NewsRepository:
             url: str,
             published_at: datetime,
             description: str
-    ):
-        stmt = insert(News).values(
+    ) -> News:
+        db_news = News(
             url=url,
             source=source,
             title=title,
             published_at=published_at,
             description=description
-        ).on_conflict_do_nothing(index_elements=['url'])
-        await self.db.execute(stmt)
+        )
+        self.db.add(db_news)
+        await self.db.flush()
+        return db_news
+
+    async def exist(self, url: str) -> News | None:
+        result = await self.db.execute(
+            select(News)
+            .where(News.url == url)
+        )
+
+        return result.one_or_none()
 
     async def get_all(self) -> List[News]:
         result = await self.db.execute(select(News))

@@ -1,7 +1,7 @@
-from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.db.models.subscription import Subscription
-from sqlalchemy import select, func,delete
+from sqlalchemy import select, delete
+from sqlalchemy.orm import selectinload
 from uuid import UUID
 
 
@@ -23,6 +23,15 @@ class SubscriptionRepository:
         result = await self.db.execute(
             select(Subscription)
             .where(Subscription.user_id == user_id)
+        )
+
+        return list(result.scalars().all())
+
+    async def get_subscribed_users(self, source: str) -> list[Subscription]:
+        result = await self.db.execute(
+            select(Subscription)
+            .where(Subscription.source == source)
+            .options(selectinload(Subscription.user))
         )
 
         return list(result.scalars().all())

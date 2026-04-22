@@ -29,7 +29,7 @@ class NewsHandler:
 
     async def open_news(self, message: Message):
         await message.answer(
-            text="Выберите:",
+            text="Получить новости:",
             reply_markup=news_menu()
         )
 
@@ -65,7 +65,7 @@ class NewsHandler:
         total_pages = result["total_pages"]
 
         text = "\n\n\n".join(
-            f"Новость:\n"
+            f"Новость:\n\n"
             f"<b>📰 {news.title}</b>\n\n"
             f"📅 Новость опубликована {news.published_at} по МСК\n\n"
             f"🔗 <a href='{news.url}'>{news.source}</a>"
@@ -96,7 +96,7 @@ class NewsHandler:
 
     async def exit_to_news_menu(self, callback: CallbackQuery):
         await callback.message.edit_text(
-            text="Выберите:",
+            text="Получить новости:",
             reply_markup=news_menu()
         )
 

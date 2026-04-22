@@ -1,3 +1,4 @@
+from datetime import timezone, timedelta
 from src.db.database import Base
 from sqlalchemy import (
     Column,
@@ -16,3 +17,9 @@ class News(Base):
     title = Column(String)
     published_at = Column(DateTime(timezone=True))
     description = Column(String)
+
+    @property
+    def formatted_published_at(self):
+        moscow_tz = timezone(timedelta(hours=3))
+        moscow_time = self.published_at.astimezone(moscow_tz)
+        return moscow_time.strftime("%d.%m.%Y в %H:%M")

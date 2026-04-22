@@ -24,6 +24,21 @@ class SubscriptionService:
             subscriptions = await uow.subscriptions.get_all_subscriptions(user_id=user_id)
         return subscriptions
 
+    async def get_all_subs_on_source(self) -> dict[str, list[Subscription]]:
+        uow = UnitOfWork()
+        async with uow.start():
+            kommersant_subs = await uow.subscriptions.get_subscribed_users(source="kommersant")
+            bloomberg_subs = await uow.subscriptions.get_subscribed_users(source="bloomberg")
+            interfax_subs = await uow.subscriptions.get_subscribed_users(source="interfax")
+            theguardian_subs = await uow.subscriptions.get_subscribed_users(source="theguardian")
+
+        return {
+            "kommersant_subs": kommersant_subs,
+            "bloomberg_subs": bloomberg_subs,
+            "interfax_subs": interfax_subs,
+            "theguardian_subs": theguardian_subs
+        }
+
     async def unsubscribe(self, user_id: UUID, source: str) -> int:
         uow = UnitOfWork()
         async with uow.start():

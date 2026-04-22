@@ -3,8 +3,8 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 def news_menu():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Получить новости из источника по умолчанию", callback_data="choose_day:default")],
-        [InlineKeyboardButton(text="Получить новости из определенного источника", callback_data="choose_source")],
+        [InlineKeyboardButton(text="Из источника по умолчанию", callback_data="choose_day:default")],
+        [InlineKeyboardButton(text="Из источника по выбору", callback_data="choose_source")],
         [InlineKeyboardButton(text="Назад", callback_data="exit-from-news")]
     ])
 
