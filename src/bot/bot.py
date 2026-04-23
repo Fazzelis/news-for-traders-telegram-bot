@@ -14,7 +14,10 @@ from src.parsers import *
 class NewsTelegramBot:
     def __init__(self):
         self.logger = getLogger()
-        self.session = AiohttpSession(proxy=settings.proxy_url)
+        if settings.proxy_url:
+            self.session = AiohttpSession(proxy=settings.proxy_url)
+        else:
+            self.session = AiohttpSession()
         self.bot = Bot(token=settings.bot_token, session=self.session)
 
         self.user_service = UserService()
