@@ -1,7 +1,6 @@
 .venv/
 .idea/
 .env
-alembic.ini
 migration/README
 __pycache__/
 *.pyc
